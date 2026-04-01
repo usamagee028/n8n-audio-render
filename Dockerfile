@@ -1,17 +1,23 @@
-FROM docker.n8n.io/n8nio/n8n:latest
-
-USER root
-
-RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*
+# Stage 1: install app dependencies
+FROM node:20-bookworm-slim AS app-builder
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci --omit=dev
 
 COPY index.js ./
+
+# Stage 2: final image with n8n
+FROM docker.n8n.io/n8nio/n8n:latest
+
+USER root
+
+WORKDIR /app
+
+COPY --from=app-builder /app /app
 COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
+RUN chmod +x /app/start.sh && chown -R node:node /app
 
 USER node
 WORKDIR /home/node
