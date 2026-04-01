@@ -1,15 +1,17 @@
 const { spawn } = require("child_process");
 
-console.log(`Starting audio extractor on port ${process.env.APP_PORT || 3001}`);
+const env = { ...process.env };
+
+console.log(`Starting audio extractor on port ${env.APP_PORT || 3001}`);
 const audioApp = spawn("node", ["/app/index.js"], {
   stdio: "inherit",
-  env: process.env
+  env,
 });
 
-console.log(`Starting n8n on port ${process.env.PORT || 5678}`);
+console.log(`Starting n8n on port ${env.PORT || 5678}`);
 const n8n = spawn("n8n", ["start"], {
   stdio: "inherit",
-  env: process.env
+  env,
 });
 
 audioApp.on("exit", (code) => {
