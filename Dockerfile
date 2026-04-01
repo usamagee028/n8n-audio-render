@@ -7,6 +7,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 COPY index.js ./
+COPY start.sh ./
 
 # Stage 2: final image with n8n
 FROM docker.n8n.io/n8nio/n8n:latest
@@ -16,10 +17,9 @@ USER root
 WORKDIR /app
 
 COPY --from=app-builder /app /app
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh && chown -R node:node /app
+RUN sed -i 's/\r$//' /app/start.sh && chmod +x /app/start.sh && chown -R node:node /app
 
 USER node
 WORKDIR /home/node
 
-CMD ["/app/start.sh"]
+CMD ["sh", "/app/start.sh"]
