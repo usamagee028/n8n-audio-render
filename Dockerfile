@@ -2,7 +2,7 @@ FROM docker.n8n.io/n8nio/n8n:latest
 
 USER root
 
-RUN apk add --no-cache nodejs npm
+RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
