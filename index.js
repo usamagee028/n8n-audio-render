@@ -163,7 +163,7 @@ app.post("/mux-video", async (req, res) => {
     });
   }
 });
-const PORT = process.env.APP_PORT || 3001;
-app.listen(PORT, "127.0.0.1", () => {
-  console.log(`Audio extractor API running on port ${PORT}`);
-});
+// const PORT = process.env.APP_PORT || 3001;
+// app.listen(PORT, "127.0.0.1", () => {
+//   console.log(`Audio extractor API running on port ${PORT}`);
+// });
